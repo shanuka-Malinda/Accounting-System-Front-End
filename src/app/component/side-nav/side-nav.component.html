@@ -1,0 +1,178 @@
+ <!-- Mobile overlay -->
+<div 
+  *ngIf="isMobile && isOpen" 
+  class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity duration-300"
+  (click)="closeSidebar()"
+></div>
+
+<!-- Sidebar -->
+<div [ngClass]="{
+  'translate-x-0': isOpen,
+  '-translate-x-full': !isOpen
+}" 
+class="fixed top-0 left-0 z-50 w-64 h-screen bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0">
+  
+  <!-- Header -->
+  <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+      </div>
+      <h1 class="text-xl font-bold text-gray-800 dark:text-white">Beta Code</h1>
+    </div>
+    <button 
+      (click)="toggleSidebar()"
+      class="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- User Profile -->
+  <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="flex items-center space-x-3">
+      <img 
+        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+        alt="User avatar" 
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+          Super Admin
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 truncate">
+         superadmin&#64;gmail.com
+        </p>
+      </div>
+      <div class="flex-shrink-0">
+        <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 overflow-y-auto p-4">
+    <ul class="space-y-2">
+      <li *ngFor="let item of navigationItems">
+        <!-- Parent Item -->
+        <div>
+          <button
+            *ngIf="!item.children"
+            (click)="navigate(item.route)"
+            [ngClass]="{
+              'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg': isActive(item.route),
+              'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800': !isActive(item.route)
+            }"
+            class="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group"
+          >
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"/>
+            </svg>
+            <span class="flex-1 text-left">{{ item.name }}</span>
+            <span 
+              *ngIf="item.badge" 
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+              [ngClass]="{
+                'bg-white/20 text-white': isActive(item.route),
+                'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': !isActive(item.route)
+              }"
+            >
+              {{ item.badge }}
+            </span>
+          </button>
+
+          <!-- Parent Item with Children -->
+          <button
+            *ngIf="item.children"
+            (click)="toggleDropdown(item.name)"
+            [ngClass]="{
+              'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg': isParentActive(item),
+              'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800': !isParentActive(item)
+            }"
+            class="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group"
+          >
+            <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"/>
+            </svg>
+            <span class="flex-1 text-left">{{ item.name }}</span>
+            <span 
+              *ngIf="item.badge" 
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium mr-2"
+              [ngClass]="{
+                'bg-white/20 text-white': isParentActive(item),
+                'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300': !isParentActive(item)
+              }"
+            >
+              {{ item.badge }}
+            </span>
+            <svg 
+              class="w-4 h-4 transition-transform duration-200"
+              [ngClass]="{ 'rotate-180': activeDropdown === item.name }"
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+
+          <!-- Children Items -->
+          <div 
+            *ngIf="item.children && activeDropdown === item.name"
+            class="mt-2 ml-8 space-y-1 animate-fade-in"
+          >
+            <button
+              *ngFor="let child of item.children"
+              (click)="navigate(child.route)"
+              [ngClass]="{
+                'bg-blue-50 text-blue-700 border-r-2 border-blue-600 dark:bg-blue-900/30 dark:text-blue-300': isActive(child.route),
+                'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50': !isActive(child.route)
+              }"
+              class="w-full flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200"
+            >
+              <div class="w-2 h-2 rounded-full mr-3 flex-shrink-0"
+                   [ngClass]="{
+                     'bg-blue-600': isActive(child.route),
+                     'bg-gray-300 dark:bg-gray-600': !isActive(child.route)
+                   }">
+              </div>
+              <span>{{ child.name }}</span>
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Footer -->
+  <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+    <div class="flex items-center justify-between">
+      <button class="flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        Logout
+      </button>
+      <button class="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile menu button -->
+<button
+  *ngIf="isMobile && !isOpen"
+  (click)="toggleSidebar()"
+  class="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+>
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+</button>

@@ -1,0 +1,205 @@
+<div class="container mx-auto p-6 bg-gray-50 min-h-screen">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Account Groups</h1>
+    <button (click)="openModal()" class="px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
+      Add Account
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+    <div class="relative mx-auto p-5 border w-full max-w-lg shadow-lg rounded-md bg-white">
+      <div class="flex justify-between items-center pb-3">
+        <h3 class="text-2xl font-bold text-gray-800">Add New Account</h3>
+        <button (click)="closeModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </button>
+      </div>
+      <form [formGroup]="addAccountForm" (ngSubmit)="onSubmit()">
+      <div class="space-y-4">
+        <!-- Account Category Dropdown -->
+        <div>
+          <label for="acc_cat" class="block text-sm font-medium text-gray-700 mb-1">Account Category</label>
+          <select
+            name="acc_cat"
+            id="acc_cat"
+            formControlName="acc_cat"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 bg-white text-gray-700"
+          >
+            <option value="" disabled selected>Select a category</option>
+            <option *ngFor="let category of accountCategories$ | async" [value]="category.id">
+              {{ category.code + ' - ' + category.name }}
+            </option>
+          </select>
+          <div *ngIf="addAccountForm.controls['acc_cat'].invalid && (addAccountForm.controls['acc_cat'].dirty || addAccountForm.controls['acc_cat'].touched)" class="text-red-500 text-sm mt-1">
+            Account category is required.
+            </div>
+        </div>
+
+        <!-- Account Name -->
+        <div>
+          <label for="acc_name" class="block text-sm font-medium text-gray-700 mb-1">Account Name</label>
+          <input
+            type="text"
+            name="acc_name"
+            id="acc_name"
+            formControlName="acc_name"
+            placeholder="Enter account name"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+          />
+            <div *ngIf="addAccountForm.controls['acc_name'].invalid && (addAccountForm.controls['acc_name'].dirty || addAccountForm.controls['acc_name'].touched)" class="text-red-500 text-sm mt-1">
+                Account name is required.
+                </div>
+        </div>
+
+        <!-- Account Description -->
+        <div>
+          <label for="acc_desc" class="block text-sm font-medium text-gray-700 mb-1">Account Description</label>
+          <input
+            type="text"
+            name="acc_desc"
+            id="acc_desc"
+            formControlName="acc_desc"
+            placeholder="Enter account description"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+          />
+            <div *ngIf="addAccountForm.controls['acc_desc'].invalid && (addAccountForm.controls['acc_desc'].dirty || addAccountForm.controls['acc_desc'].touched)" class="text-red-500 text-sm mt-1">
+                Account description is required.
+                </div>
+        </div>
+
+        <!-- Opening Balance -->
+        <div>
+          <label for="acc_opening_balance" class="block text-sm font-medium text-gray-700 mb-1">Opening Balance</label>
+          <input
+            type="number"
+            name="acc_opening_balance"
+            id="acc_opening_balance"
+            formControlName="acc_opening_balance"
+            placeholder="Enter opening balance"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+          />
+            <div *ngIf="addAccountForm.controls['acc_opening_balance'].invalid && (addAccountForm.controls['acc_opening_balance'].dirty || addAccountForm.controls['acc_opening_balance'].touched)" class="text-red-500 text-sm mt-1">
+                Opening balance is required.
+                </div>
+        </div>
+
+        <!-- Credit Limit -->
+        <div>
+          <label for="acc_credit_limit" class="block text-sm font-medium text-gray-700 mb-1">Credit Limit</label>
+          <input
+            type="number"
+            name="acc_credit_limit"
+            id="acc_credit_limit"
+            formControlName="acc_credit_limit"
+            placeholder="Enter credit limit"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+          />
+            <div *ngIf="addAccountForm.controls['acc_credit_limit'].invalid && (addAccountForm.controls['acc_credit_limit'].dirty || addAccountForm.controls['acc_credit_limit'].touched)" class="text-red-500 text-sm mt-1">
+                Credit limit is required.
+                </div>
+        </div>
+
+        <!-- Current Balance -->
+        <div>
+          <label for="acc_current_balance" class="block text-sm font-medium text-gray-700 mb-1">Current Balance</label>
+          <input
+            type="number"
+            name="acc_current_balance"
+            id="acc_current_balance"
+            formControlName="acc_current_balance"
+            placeholder="Enter current balance"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200"
+          />
+            <div *ngIf="addAccountForm.controls['acc_current_balance'].invalid && (addAccountForm.controls['acc_current_balance'].dirty || addAccountForm.controls['acc_current_balance'].touched)" class="text-red-500 text-sm mt-1">
+                Current balance is required.
+                </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-6">
+          <button
+            type="submit"
+            [disabled]="addAccountForm.invalid"
+            class="w-full px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Add Account
+          </button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+  <div class="shadow-xl rounded-lg overflow-hidden bg-white">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gradient-to-r from-indigo-600 to-indigo-500 text-white">
+          <tr>
+            <th class="px-6 py-4 text-left text-sm font-semibold tracking-wider">Name</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold tracking-wider">Code</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold tracking-wider">Status</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold tracking-wider">Created At</th>
+            <th class="px-6 py-4 text-left text-sm font-semibold tracking-wider">Accounts</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <ng-container *ngFor="let group of accountGroups$ | async; let i = index">
+            <tr class="hover:bg-gray-50 transition-colors duration-200">
+              <td class="px-6 py-4 text-gray-700">{{ group.name }}</td>
+              <td class="px-6 py-4 text-gray-700">{{ group.code }}</td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      [ngClass]="{
+                        'bg-green-100 text-green-800': group.commonStatus === 'ACTIVE',
+                        'bg-red-100 text-red-800': group.commonStatus !== 'ACTIVE'
+                      }">
+                  {{ group.commonStatus }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-gray-700">{{ group.createdAt | date:'medium' }}</td>
+              <td class="px-6 py-4">
+                <ng-container *ngIf="group.accounts && group.accounts.length > 0; else noAccounts">
+                  <button 
+                    class="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
+                    (click)="toggleAccounts(group.id)">
+                    {{ expandedGroupId === group.id ? 'Hide' : 'Show' }} Accounts
+                  </button>
+                </ng-container>
+                <ng-template #noAccounts>
+                  <span class="text-gray-500 italic">No Accounts</span>
+                </ng-template>
+              </td>
+            </tr>
+            <tr *ngIf="expandedGroupId === group.id && group.accounts" class="bg-gray-50">
+              <td colspan="5" class="px-6 py-4">
+                <div class="ml-4">
+                  <table class="w-full divide-y divide-gray-200 rounded-md shadow-sm">
+                    <thead class="bg-gray-100">
+                      <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Account No</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Name</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Opening Balance</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Current Balance</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Credit Limit</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                      <tr *ngFor="let account of group.accounts" class="hover:bg-gray-100 transition-colors duration-200">
+                        <td class="px-4 py-3 text-gray-700">{{ account.accNo }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.name }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.openingBalance | currency }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.currentBalance | currency }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.creditLimit | currency }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

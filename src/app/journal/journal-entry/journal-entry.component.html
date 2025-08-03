@@ -1,0 +1,321 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6">
+  <div class="w-full max-w-2xl">
+    <div class="bg-white rounded-t-xl shadow-lg border-b border-gray-200 px-8 py-6">
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        Journal Entry
+      </h1>
+      <p class="mt-2 text-gray-500 text-lg">
+        Create a new accounting entry by filling out the details below.
+      </p>
+    </div>
+
+    <div class="bg-white rounded-b-xl shadow-lg border border-gray-200 p-8">
+      <form
+        [formGroup]="journalEntryForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-8"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label
+              for="debitAccount"
+              class="flex items-center text-sm font-medium text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2 text-blue-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 21Z"
+                />
+              </svg>
+              Debit Account <span class="text-red-500 ml-1">*</span>
+            </label>
+            <div class="relative">
+              <select
+                id="debitAccount"
+                formControlName="debitAccount"
+                [class]="'w-full px-4 py-2 border rounded-lg shadow-sm bg-gray-50 text-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none ' + (isFieldInvalid('debitAccount') ? 'border-red-500' : 'border-gray-300')"
+              >
+                <option value="">Select Debit Account</option>
+                <option *ngFor="let account of accounts" [value]="account.id">
+                  {{ getAccountDisplayName(account) }}
+                </option>
+              </select>
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+              >
+                <svg
+                  class="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.05 6.879 4.636 8.293z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              *ngIf="isFieldInvalid('debitAccount')"
+              class="text-red-600 text-xs mt-1"
+            >
+              {{ getFieldError('debitAccount') }}
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label
+              for="creditAccount"
+              class="flex items-center text-sm font-medium text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2 text-green-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 21Z"
+                />
+              </svg>
+              Credit Account <span class="text-red-500 ml-1">*</span>
+            </label>
+            <div class="relative">
+              <select
+                id="creditAccount"
+                formControlName="creditAccount"
+                [class]="'w-full px-4 py-2 border rounded-lg shadow-sm bg-gray-50 text-gray-800 transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 appearance-none ' + (isFieldInvalid('creditAccount') ? 'border-red-500' : 'border-gray-300')"
+              >
+                <option value="">Select Credit Account</option>
+                <option *ngFor="let account of accounts" [value]="account.id">
+                  {{ getAccountDisplayName(account) }}
+                </option>
+              </select>
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+              >
+                <svg
+                  class="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 6.05 6.879 4.636 8.293z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div
+              *ngIf="isFieldInvalid('creditAccount')"
+              class="text-red-600 text-xs mt-1"
+            >
+              {{ getFieldError('creditAccount') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label
+              for="amount"
+              class="flex items-center text-sm font-medium text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2 text-gray-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.825-1.106-2.257 0-3.082s2.961-.825 4.067 0l.935.7a4.5 4.5 0 0 0 6.364-6.364l-.935-.7a6.75 6.75 0 0 0-9.546 0l-.935.7a4.5 4.5 0 0 0 0 6.364l.935.7a6.75 6.75 0 0 0 9.546 0l.935-.7a4.5 4.5 0 0 0 0-6.364l-.935-.7"
+                />
+              </svg>
+              Amount <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              type="number"
+              id="amount"
+              formControlName="amount"
+              [class]="'w-full px-4 py-2 border rounded-lg shadow-sm bg-gray-50 text-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ' + (isFieldInvalid('amount') ? 'border-red-500' : 'border-gray-300')"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+            />
+            <div
+              *ngIf="isFieldInvalid('amount')"
+              class="text-red-600 text-xs mt-1"
+            >
+              {{ getFieldError('amount') }}
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label
+              for="date"
+              class="flex items-center text-sm font-medium text-gray-700"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5 mr-2 text-gray-500"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0h18M-4.5 12h22.5"
+                />
+              </svg>
+              Date <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              type="date"
+              id="date"
+              formControlName="date"
+              [class]="'w-full px-4 py-2 border rounded-lg shadow-sm bg-gray-50 text-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ' + (isFieldInvalid('date') ? 'border-red-500' : 'border-gray-300')"
+            />
+            <div
+              *ngIf="isFieldInvalid('date')"
+              class="text-red-600 text-xs mt-1"
+            >
+              {{ getFieldError('date') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label
+            for="description"
+            class="flex items-center text-sm font-medium text-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2 text-gray-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+              />
+            </svg>
+            Description <span class="text-red-500 ml-1">*</span>
+          </label>
+          <textarea
+            id="description"
+            formControlName="description"
+            [class]="'w-full px-4 py-2 border rounded-lg shadow-sm bg-gray-50 text-gray-800 transition-colors resize-y focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ' + (isFieldInvalid('description') ? 'border-red-500' : 'border-gray-300')"
+            placeholder="Enter transaction description..."
+            rows="3"
+          ></textarea>
+          <div
+            *ngIf="isFieldInvalid('description')"
+            class="text-red-600 text-xs mt-1"
+          >
+            {{ getFieldError('description') }}
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label
+            for="reference"
+            class="flex items-center text-sm font-medium text-gray-700"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2 text-gray-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5-3.9 19.5m-2.1-19.5-3.9 19.5"
+              />
+            </svg>
+            Reference
+          </label>
+          <input
+            type="text"
+            id="reference"
+            formControlName="reference"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-gray-50 text-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Reference number or code (optional)"
+          />
+        </div>
+
+        <div
+          *ngIf="journalEntryForm.get('amount')?.value && journalEntryForm.get('creditAccount')?.value && journalEntryForm.get('debitAccount')?.value"
+          class="bg-blue-50 border border-blue-200 rounded-xl p-6"
+        >
+          <h3 class="text-sm font-bold text-blue-800 mb-4 uppercase">
+            Transaction Summary
+          </h3>
+          <div class="space-y-3">
+            <div
+              class="bg-white border border-gray-200 rounded-lg p-4 grid grid-cols-2 sm:grid-cols-3 gap-4 items-center"
+            >
+              <span class="text-sm font-semibold text-gray-700">Debit:</span>
+              <span class="text-sm text-gray-600 truncate">
+                </span>
+              <span class="text-sm font-bold text-green-600 text-right">
+                $ {{ journalEntryForm.get("amount")?.value | number: "1.2-2" }}
+              </span>
+            </div>
+            <div
+              class="bg-white border border-gray-200 rounded-lg p-4 grid grid-cols-2 sm:grid-cols-3 gap-4 items-center"
+            >
+              <span class="text-sm font-semibold text-gray-700">Credit:</span>
+              <span class="text-sm text-gray-600 truncate">
+                </span>
+              <span class="text-sm font-bold text-red-600 text-right">
+                $ {{ journalEntryForm.get("amount")?.value | number: "1.2-2" }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-6 border-t border-gray-200"
+        >
+          <button
+            type="button"
+            class="px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+            (click)="onReset()"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            [disabled]="journalEntryForm.invalid"
+            class="px-6 py-3 text-sm font-semibold text-white bg-blue-600 border border-transparent rounded-lg shadow-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+          >
+            Create Journal Entry
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
