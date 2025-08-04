@@ -22,17 +22,17 @@ export class AccountService {
     );
   }
 
- 
 
-  createAccount(account: CreateAccount){
-  return this.http.post(`${this.apiUrl}/acc/create`, account).pipe(
-    map(response => {
-      return response; // Ensure payload matches Account interface
-    }),
-    // retry(2),
-    catchError(this.handleError)
-  );
-}
+
+  createAccount(account: CreateAccount) {
+    return this.http.post(`${this.apiUrl}/acc/create`, account).pipe(
+      map(response => {
+        return response; // Ensure payload matches Account interface
+      }),
+      // retry(2),
+      catchError(this.handleError)
+    );
+  }
 
   private handleError(error: any) {
     console.error('API Error:', error);

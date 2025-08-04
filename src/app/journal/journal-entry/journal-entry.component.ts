@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Account } from '../../models/account';
 import { ApiResponse } from '../../models/api-response';
 import { JournalEntry } from '../../models/journal-entry';
+import { JournalEntryService } from '../../services/journal/journal-entry.service';
 
 @Component({
   selector: 'app-journal-entry',
@@ -18,7 +19,8 @@ export class JournalEntryComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private journalEntryService: JournalEntryService
   ) {
     this.journalEntryForm = this.fb.group({
       debitAccount: ['', Validators.required],
@@ -95,6 +97,20 @@ export class JournalEntryComponent implements OnInit {
           reference: this.journalEntryForm.value.reference
         }
       ];
+
+      this.journalEntryService.createJournalEntry(data).subscribe({
+        next: (response: any) => {
+          if (response.status) {
+            console.log('Journal Entry Created Successfully:', response.payload);
+            this.journalEntryForm.reset();
+          } else {
+            console.error('Failed to create journal entry:', response.errorMessages);
+          }
+        },
+        error: (error) => {
+          console.error('Error creating journal entry:', error);
+        }
+      });
 
       console.log('Formatted Data:', data);
        
