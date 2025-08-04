@@ -12,18 +12,17 @@ export class AccountService {
   private apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  // createAccount(account: CreateAccount): Observable<Account> {
-  //   return this.http.post<ApiResponse<CreateAccount>>(`${this.apiUrl}/acc/create`, account).pipe(
-  //     map(response => {
-  //       if (!response.status) {
-  //         throw new Error(response.errorMessages.join(', ') || 'API call failed');
-  //       }
-  //       return response.payload;
-  //     }),
-  //     retry(2),
-  //     catchError(this.handleError)
-  //   );
-  // }
+  getAccounts(): Observable<ApiResponse<Account[]>> {
+    return this.http.get<ApiResponse<Account[]>>(`${this.apiUrl}/acc/all`).pipe(
+      map(response => {
+        return response; // Ensure payload matches ApiResponse<Account[]>
+      }),
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+ 
 
   createAccount(account: CreateAccount){
   return this.http.post(`${this.apiUrl}/acc/create`, account).pipe(

@@ -1,155 +1,107 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-interface Account {
-  id: string;
-  name: string;
-  type: string;
-}
+import { AccountService } from '../../services/master-accounts/account.service';
+import { Observable } from 'rxjs';
+import { Account } from '../../models/account';
+import { ApiResponse } from '../../models/api-response';
+import { JournalEntry } from '../../models/journal-entry';
 
-interface JournalEntry {
-  creditAccount: string;
-  debitAccount: string;
-  amount: number;
-  description: string;
-  reference: string;
-  date: string;
-}
 @Component({
   selector: 'app-journal-entry',
   templateUrl: './journal-entry.component.html',
-  styleUrl: './journal-entry.component.css'
+  styleUrls: ['./journal-entry.component.css']
 })
-export class JournalEntryComponent implements OnInit{
-journalEntryForm!: FormGroup;
-  accounts: Account[] = [
-    { id: '1001', name: 'Cash', type: 'Asset' },
-    { id: '1002', name: 'Accounts Receivable', type: 'Asset' },
-    { id: '1003', name: 'Inventory', type: 'Asset' },
-    { id: '1004', name: 'Prepaid Expenses', type: 'Asset' },
-    { id: '1005', name: 'Equipment', type: 'Asset' },
-    { id: '2001', name: 'Accounts Payable', type: 'Liability' },
-    { id: '2002', name: 'Notes Payable', type: 'Liability' },
-    { id: '2003', name: 'Accrued Liabilities', type: 'Liability' },
-    { id: '3001', name: 'Owner\'s Capital', type: 'Equity' },
-    { id: '3002', name: 'Retained Earnings', type: 'Equity' },
-    { id: '4001', name: 'Sales Revenue', type: 'Revenue' },
-    { id: '4002', name: 'Service Revenue', type: 'Revenue' },
-    { id: '5001', name: 'Cost of Goods Sold', type: 'Expense' },
-    { id: '5002', name: 'Office Supplies Expense', type: 'Expense' },
-    { id: '5003', name: 'Rent Expense', type: 'Expense' },
-    { id: '5004', name: 'Utilities Expense', type: 'Expense' },
-    { id: '5005', name: 'Salaries Expense', type: 'Expense' }
-  ];
+export class JournalEntryComponent implements OnInit {
+  journalEntryForm: FormGroup;
+  accounts$!: Observable<ApiResponse<Account[]>>;
+  accounts: any[] = []; // Adjusted type to any[] for flexibility
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService
+  ) {
+    this.journalEntryForm = this.fb.group({
+      debitAccount: ['', Validators.required],
+      creditAccount: ['', Validators.required],
+      amount: [null, [Validators.required, Validators.min(0.01)]],
+      date: ['', Validators.required],
+      description: ['', Validators.required],
+      reference: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.getAccounts();
   }
 
-  private initializeForm(): void {
-    const today = new Date().toISOString().split('T')[0];
-    
-    this.journalEntryForm = this.fb.group({
-      creditAccount: ['', [Validators.required]],
-      debitAccount: ['', [Validators.required]],
-      amount: ['', [Validators.required, Validators.min(0.01)]],
-      description: ['', [Validators.required, Validators.minLength(3)]],
-      reference: [''],
-      date: [today, [Validators.required]]
-    }, { validators: this.differentAccountsValidator });
-  }
-
-  // Custom validator to ensure credit and debit accounts are different
-  private differentAccountsValidator(form: FormGroup) {
-    const creditAccount = form.get('creditAccount')?.value;
-    const debitAccount = form.get('debitAccount')?.value;
-    
-    if (creditAccount && debitAccount && creditAccount === debitAccount) {
-      return { sameAccounts: true };
-    }
-    return null;
-  }
-
-  getAccountDisplayName(account: Account): string {
-    return `${account.id} - ${account.name} (${account.type})`;
-  }
-
-  isFieldInvalid(fieldName: string): boolean {
-    const field = this.journalEntryForm.get(fieldName);
-    return !!(field && field.invalid && (field.dirty || field.touched));
-  }
-
-  getFieldError(fieldName: string): string {
-    const field = this.journalEntryForm.get(fieldName);
-    if (field && field.errors) {
-      if (field.errors['required']) {
-        return `${this.getFieldLabel(fieldName)} is required`;
+  private getAccounts(): void {
+    this.accountService.getAccounts().subscribe({
+      next: (response: any) => {
+        if (response.status) {
+          this.accounts = response.payload[0];
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching accounts:', error);
       }
-      if (field.errors['min']) {
-        return 'Amount must be greater than 0';
-      }
-      if (field.errors['minlength']) {
-        return 'Description must be at least 3 characters long';
-      }
-    }
-    
-    // Check for same accounts error
-    if (this.journalEntryForm.errors?.['sameAccounts'] && 
-        (fieldName === 'creditAccount' || fieldName === 'debitAccount')) {
-      return 'Credit and debit accounts must be different';
-    }
-    
-    return '';
+    });
   }
 
-  private getFieldLabel(fieldName: string): string {
-    const labels: { [key: string]: string } = {
-      creditAccount: 'Credit Account',
-      debitAccount: 'Debit Account',
-      amount: 'Amount',
-      description: 'Description',
-      date: 'Date'
-    };
-    return labels[fieldName] || fieldName;
+  isFieldInvalid(field: string): boolean {
+    const control = this.journalEntryForm.get(field);
+    return !!control && control.invalid && (control.dirty || control.touched);
   }
+
+
 
   onSubmit(): void {
     if (this.journalEntryForm.valid) {
-      const formData: JournalEntry = this.journalEntryForm.value;
-      console.log('Journal Entry Submitted:', formData);
-      
-      // Here you would typically call a service to save the journal entry
-      // this.journalService.createEntry(formData).subscribe(...)
-      
-      alert('Journal entry created successfully!');
-      this.resetForm();
-    } else {
-      // Mark all fields as touched to show validation errors
-      this.markAllFieldsAsTouched();
+      console.log('Journal Entry Submitted:', this.journalEntryForm.value);
+      //  let data=[
+      //   {
+      //     accNo: this.journalEntryForm.value.debitAccount,
+      //     amount: this.journalEntryForm.value.amount,
+      //     creditDebit: 0,
+      //     date: this.journalEntryForm.value.date,
+      //     description: this.journalEntryForm.value.description,
+      //     reference: this.journalEntryForm.value.reference
+      //   },
+      //   {
+      //     accNo: this.journalEntryForm.value.creditAccount,
+      //     amount: this.journalEntryForm.value.amount,
+      //     creditDebit: 1,
+      //     date: this.journalEntryForm.value.date,
+      //     description: this.journalEntryForm.value.description,
+      //     reference: this.journalEntryForm.value.reference
+      //   }
+      // ];
+
+
+      let data: JournalEntry[] = [
+        {
+          accNo: this.journalEntryForm.value.debitAccount,
+          amount: this.journalEntryForm.value.amount,
+          creditDebit: 0,
+          date: this.journalEntryForm.value.date,
+          description: this.journalEntryForm.value.description,
+          reference: this.journalEntryForm.value.reference
+        },
+        {
+          accNo: this.journalEntryForm.value.creditAccount,
+          amount: this.journalEntryForm.value.amount,
+          creditDebit: 1,
+          date: this.journalEntryForm.value.date,
+          description: this.journalEntryForm.value.description,
+          reference: this.journalEntryForm.value.reference
+        }
+      ];
+
+      console.log('Formatted Data:', data);
+       
     }
   }
 
   onReset(): void {
-    this.resetForm();
-  }
-
-  private resetForm(): void {
-    const today = new Date().toISOString().split('T')[0];
-    this.journalEntryForm.reset({
-      creditAccount: '',
-      debitAccount: '',
-      amount: '',
-      description: '',
-      reference: '',
-      date: today
-    });
-  }
-
-  private markAllFieldsAsTouched(): void {
-    Object.keys(this.journalEntryForm.controls).forEach(key => {
-      this.journalEntryForm.get(key)?.markAsTouched();
-    });
+    this.journalEntryForm.reset();
   }
 }
-

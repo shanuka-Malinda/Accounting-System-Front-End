@@ -13,6 +13,7 @@ import { InventoryComponent } from './journal/inventory/inventory.component';
 import { SalesComponent } from './journal/sales/sales.component';
 import { AccountsComponent } from './master-acc/accounts/accounts.component';
 import { JournalEntryComponent } from './journal/journal-entry/journal-entry.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { JournalEntryComponent } from './journal/journal-entry/journal-entry.com
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    
   ],
   providers: [
     provideClientHydration()

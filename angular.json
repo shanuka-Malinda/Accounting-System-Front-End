@@ -35,9 +35,6 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/@primeuix/themes/aura/aura-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css",
-              "node_modules/primeicons/primeicons.css",
               "src/styles.css"
             ],
             "scripts": [],
