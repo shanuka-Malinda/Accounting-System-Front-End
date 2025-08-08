@@ -1,0 +1,73 @@
+<div class="card m-5">
+    <div class="filter-container mb-4">
+        <div class="flex items-center space-x-4">
+            <div>
+                <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" id="startDate" name="startDate" [(ngModel)]="startDate"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
+                <input type="date" id="endDate" name="endDate" [(ngModel)]="endDate"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="selectedAccount" class="block text-sm font-medium text-gray-700">Select Account</label>
+                <select id="selectedAccount" name="selectedAccount" [(ngModel)]="selectedAccount"
+                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">All Accounts</option>
+                    <option *ngFor="let account of accounts" [value]="account.accNo">{{ account.accNo }} - {{ account.name }}</option>
+                </select>
+            </div>
+            <div class="pt-5">
+                <button (click)="filterReport()"
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Filter
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card m-5">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+        <thead class="bg-gray-100 text-gray-700">
+            <tr>
+                <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">ID</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Reference</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Account No</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Description</th>
+                <th class="px-6 py-3 text-right text-sm font-semibold uppercase tracking-wider">Credit</th>
+                <th class="px-6 py-3 text-right text-sm font-semibold uppercase tracking-wider">Debit</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let item of reportData" class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.id }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.date | date:'short' }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.reference }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.accNo }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.description }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 text-right">
+                    {{ item.creditDebit === 0 && item.amount != null ? (item.amount) : '' }}
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-900 text-right">
+                    {{ item.creditDebit === 1 && item.amount != null ? (item.amount) : '' }}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot class="bg-gray-50">
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                    <strong>Total:</strong>
+                </td>
+                <td class="px-6 py-4 text-sm font-semibold text-gray-900 text-right">
+                    {{totalCredit}}
+                </td>
+                <td class="px-6 py-4 text-sm font-semibold text-gray-900 text-right">
+                    {{totalDebit}}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -102,6 +102,7 @@ export class JournalEntryComponent implements OnInit {
         next: (response: any) => {
           if (response.status) {
             console.log('Journal Entry Created Successfully:', response.payload);
+            alert('Journal Entry Created Successfully');
             this.journalEntryForm.reset();
           } else {
             console.error('Failed to create journal entry:', response.errorMessages);

@@ -6,23 +6,33 @@ import { InventoryComponent } from './journal/inventory/inventory.component';
 import { SalesComponent } from './journal/sales/sales.component';
 import { AccountsComponent } from './master-acc/accounts/accounts.component';
 import { JournalEntryComponent } from './journal/journal-entry/journal-entry.component';
+import { AccontReportComponent } from './reports/accont-report/accont-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent},
-  { path: 'home', component: HomeComponent ,children: [
-    {
-      path:'master-acc',children:[
-         {path:'acc',component:AccountsComponent}
-      ]
-    },
-    {path:'journal',children:[
-      {path:'journal-entry',component:JournalEntryComponent},
-      {path:'inventory',component:InventoryComponent},
-      {path:'sales',component:SalesComponent},
-    ]}
-  ]
-  }
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'home', component: HomeComponent, children: [
+      {
+        path: 'master-acc', children: [
+          { path: 'acc', component: AccountsComponent }
+        ]
+      },
+      {
+        path: 'journal', children: [
+          { path: 'journal-entry', component: JournalEntryComponent },
+          { path: 'inventory', component: InventoryComponent },
+          { path: 'sales', component: SalesComponent },
+        ]
+      },
+      {
+        path: 'reports', children: [
+          { path: 'accounts', component: AccontReportComponent }
+        ]
+      }
+    ]
+  },
+
 ];
 
 @NgModule({
