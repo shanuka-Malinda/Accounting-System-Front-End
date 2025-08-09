@@ -76,7 +76,6 @@ export class AccontReportComponent implements OnInit {
   }
 
   filterReport() {
-    alert('Filtering report with selected account: ' + this.selectedAccount);
     if (this.selectedAccount && this.selectedAccount.trim() !== '') {
       this.getAccountReportByAccount();
     } else {
@@ -98,11 +97,11 @@ export class AccontReportComponent implements OnInit {
     };
 
     this.totalCredit = (this.reportData as ReportItem[])
-      .filter(item => item && item.creditDebit === 0 && item.amount != null)
+      .filter(item => item && item.creditDebit === 1 && item.amount != null)
       .reduce((sum: number, item) => sum + (item.amount || 0), 0);
 
     this.totalDebit = (this.reportData as ReportItem[])
-      .filter(item => item && item.creditDebit === 1 && item.amount != null)
+      .filter(item => item && item.creditDebit === 0 && item.amount != null)
       .reduce((sum: number, item) => sum + (item.amount || 0), 0);
 
     console.log('Calculated totals - Credit:', this.totalCredit, 'Debit:', this.totalDebit);

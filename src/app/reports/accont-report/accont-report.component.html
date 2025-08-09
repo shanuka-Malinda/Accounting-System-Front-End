@@ -44,15 +44,15 @@
         <tbody class="divide-y divide-gray-200">
             <tr *ngFor="let item of reportData" class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.id }}</td>
-                <td class="px-6 py-4 text-sm text-gray-900">{{ item.date | date:'short' }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.date}}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.reference }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.accNo }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.description }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900 text-right">
-                    {{ item.creditDebit === 0 && item.amount != null ? (item.amount) : '' }}
+                    {{ item.creditDebit === 1 && item.amount != null ? (item.amount) : '' }}
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-900 text-right">
-                    {{ item.creditDebit === 1 && item.amount != null ? (item.amount) : '' }}
+                    {{ item.creditDebit === 0 && item.amount != null ? (item.amount) : '' }}
                 </td>
             </tr>
         </tbody>

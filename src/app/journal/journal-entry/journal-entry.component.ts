@@ -59,29 +59,21 @@ export class JournalEntryComponent implements OnInit {
   onSubmit(): void {
     if (this.journalEntryForm.valid) {
       console.log('Journal Entry Submitted:', this.journalEntryForm.value);
-      //  let data=[
-      //   {
-      //     accNo: this.journalEntryForm.value.debitAccount,
-      //     amount: this.journalEntryForm.value.amount,
-      //     creditDebit: 0,
-      //     date: this.journalEntryForm.value.date,
-      //     description: this.journalEntryForm.value.description,
-      //     reference: this.journalEntryForm.value.reference
-      //   },
-      //   {
-      //     accNo: this.journalEntryForm.value.creditAccount,
-      //     amount: this.journalEntryForm.value.amount,
-      //     creditDebit: 1,
-      //     date: this.journalEntryForm.value.date,
-      //     description: this.journalEntryForm.value.description,
-      //     reference: this.journalEntryForm.value.reference
-      //   }
-      // ];
 
+      //Debit Account
+      const selectedDebitAcc=this.journalEntryForm.value.debitAccount;
+      const accNoDebit = selectedDebitAcc.split('-')[0];
+      const catCodeDebit = selectedDebitAcc.split('-')[1];
+
+      //Credit Account
+      const selectedCreditAcc=this.journalEntryForm.value.creditAccount;
+      const accNoCredit = selectedCreditAcc.split('-')[0];
+      const catCodeCredit = selectedCreditAcc.split('-')[1];
 
       let data: JournalEntry[] = [
         {
-          accNo: this.journalEntryForm.value.debitAccount,
+          accNo: accNoDebit,
+          catCode: catCodeDebit,
           amount: this.journalEntryForm.value.amount,
           creditDebit: 0,
           date: this.journalEntryForm.value.date,
@@ -89,7 +81,8 @@ export class JournalEntryComponent implements OnInit {
           reference: this.journalEntryForm.value.reference
         },
         {
-          accNo: this.journalEntryForm.value.creditAccount,
+          accNo: accNoCredit,
+          catCode:catCodeCredit,
           amount: this.journalEntryForm.value.amount,
           creditDebit: 1,
           date: this.journalEntryForm.value.date,
