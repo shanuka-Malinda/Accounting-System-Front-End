@@ -6,6 +6,7 @@ import { AccountService } from '../../services/master-accounts/account.service';
 import { AccCategoryService } from '../../services/master-accounts/acc-category.service';
 import { AccCategory, AccCategoryOnly } from '../../models/acc-category';
 import { ApiResponse } from '../../models/api-response';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-accounts',
@@ -19,7 +20,12 @@ export class AccountsComponent implements OnInit {
   public isModalOpen = false;
   public addAccountForm!: FormGroup;
 
-  constructor(private accCategoryService: AccCategoryService, private fb: FormBuilder, private accountService: AccountService) { }
+  constructor(
+    private accCategoryService: AccCategoryService,
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.getAllAccDetails();
@@ -27,10 +33,11 @@ export class AccountsComponent implements OnInit {
     this.addAccountForm = this.fb.group({
       acc_name: ['', Validators.required],
       acc_desc: ['', Validators.required],
-      acc_opening_balance: ['', Validators.required],
-      acc_credit_limit: ['', Validators.required],
-      acc_current_balance: ['', Validators.required],
-      acc_cat: ['', Validators.required]
+      // acc_opening_balance: ['', Validators.required],
+      // acc_credit_limit: ['', Validators.required],
+      // acc_current_balance: ['', Validators.required],
+      acc_cat: ['', Validators.required],
+      is_current: ['']
     });
   }
   getAllAccDetails() {
@@ -68,9 +75,10 @@ export class AccountsComponent implements OnInit {
           const accountData: CreateAccount = {
             name: this.addAccountForm.value.acc_name,
             description: this.addAccountForm.value.acc_desc,
-            openingBalance: Number(this.addAccountForm.value.acc_opening_balance),
-            currentBalance: Number(this.addAccountForm.value.acc_current_balance),
-            creditLimit: Number(this.addAccountForm.value.acc_credit_limit),
+            // openingBalance: Number(this.addAccountForm.value.acc_opening_balance),
+            // currentBalance: Number(this.addAccountForm.value.acc_current_balance),
+            // creditLimit: Number(this.addAccountForm.value.acc_credit_limit),
+            isCurrent: this.addAccountForm.value.is_current,
             catId: selectedCategory.id,
             catCode: selectedCategory.code,
             createdBy: 'shanuka',
@@ -79,11 +87,11 @@ export class AccountsComponent implements OnInit {
           this.accountService.createAccount(accountData).subscribe({
             next: (response: any) => {
               if (response.status) {
-                alert('Account created successfully'+ response.payload);
+                this.toastr.success('Account created successfully', 'Success');
                 this.closeModal();
                 this.getAllAccDetails();
               } else {
-                alert('Failed to create account: ' + response.errorMessages.join(', '));
+                this.toastr.error('Failed to create account: ' + response.errorMessages.join(', '), 'Error');
                 this.closeModal();
                 this.getAllAccDetails();
               }
@@ -99,7 +107,7 @@ export class AccountsComponent implements OnInit {
       });
     } else {
       console.error('Form is invalid');
-      alert('Form is invalid');
+      this.toastr.error('Form is invalid', 'Error');
       this.addAccountForm.markAllAsTouched();
     }
   }

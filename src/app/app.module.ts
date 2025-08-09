@@ -15,6 +15,8 @@ import { AccountsComponent } from './master-acc/accounts/accounts.component';
 import { JournalEntryComponent } from './journal/journal-entry/journal-entry.component';
 import { CommonModule } from '@angular/common';
 import { AccontReportComponent } from './reports/accont-report/accont-report.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,7 @@ import { AccontReportComponent } from './reports/accont-report/accont-report.com
     SalesComponent,
     AccountsComponent,
     JournalEntryComponent,
-    AccontReportComponent
+    AccontReportComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,6 +38,12 @@ import { AccontReportComponent } from './reports/accont-report/accont-report.com
     HttpClientModule,
     FormsModule,
     CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    })
   ],
   providers: [
     provideClientHydration()

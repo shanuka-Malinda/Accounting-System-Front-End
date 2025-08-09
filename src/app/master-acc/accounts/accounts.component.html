@@ -34,6 +34,11 @@
           <div *ngIf="addAccountForm.controls['acc_cat'].invalid && (addAccountForm.controls['acc_cat'].dirty || addAccountForm.controls['acc_cat'].touched)" class="text-red-500 text-sm mt-1">
             Account category is required.
             </div>
+            <!-- Current / Non-Current Account -->
+            <div *ngIf="addAccountForm.controls['acc_cat'].value == 1 || (addAccountForm.controls['acc_cat'].value == 2)" class="text-sm mt-1">
+               <input type="radio" name="is_current" formControlName="is_current" [value]="1"> Current
+               <input type="radio" name="is_current" formControlName="is_current" [value]="0"> Non-Current
+            </div>
         </div>
 
         <!-- Account Name -->
@@ -69,7 +74,7 @@
         </div>
 
         <!-- Opening Balance -->
-        <div>
+        <!-- <div>
           <label for="acc_opening_balance" class="block text-sm font-medium text-gray-700 mb-1">Opening Balance</label>
           <input
             type="number"
@@ -82,10 +87,10 @@
             <div *ngIf="addAccountForm.controls['acc_opening_balance'].invalid && (addAccountForm.controls['acc_opening_balance'].dirty || addAccountForm.controls['acc_opening_balance'].touched)" class="text-red-500 text-sm mt-1">
                 Opening balance is required.
                 </div>
-        </div>
+        </div> -->
 
         <!-- Credit Limit -->
-        <div>
+        <!-- <div>
           <label for="acc_credit_limit" class="block text-sm font-medium text-gray-700 mb-1">Credit Limit</label>
           <input
             type="number"
@@ -98,10 +103,10 @@
             <div *ngIf="addAccountForm.controls['acc_credit_limit'].invalid && (addAccountForm.controls['acc_credit_limit'].dirty || addAccountForm.controls['acc_credit_limit'].touched)" class="text-red-500 text-sm mt-1">
                 Credit limit is required.
                 </div>
-        </div>
+        </div> -->
 
         <!-- Current Balance -->
-        <div>
+        <!-- <div>
           <label for="acc_current_balance" class="block text-sm font-medium text-gray-700 mb-1">Current Balance</label>
           <input
             type="number"
@@ -114,7 +119,7 @@
             <div *ngIf="addAccountForm.controls['acc_current_balance'].invalid && (addAccountForm.controls['acc_current_balance'].dirty || addAccountForm.controls['acc_current_balance'].touched)" class="text-red-500 text-sm mt-1">
                 Current balance is required.
                 </div>
-        </div>
+        </div> -->
 
         <!-- Submit Button -->
         <div class="mt-6">
@@ -179,18 +184,16 @@
                       <tr>
                         <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Account No</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Name</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Opening Balance</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Current Balance</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Credit Limit</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider">Description</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 tracking-wider"></th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                       <tr *ngFor="let account of group.accounts" class="hover:bg-gray-100 transition-colors duration-200">
                         <td class="px-4 py-3 text-gray-700">{{ account.accNo }}</td>
                         <td class="px-4 py-3 text-gray-700">{{ account.name }}</td>
-                        <td class="px-4 py-3 text-gray-700">{{ account.openingBalance | currency }}</td>
-                        <td class="px-4 py-3 text-gray-700">{{ account.currentBalance | currency }}</td>
-                        <td class="px-4 py-3 text-gray-700">{{ account.creditLimit | currency }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.description}}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.isCurrent === "1" ? 'Current' : account.isCurrent === "0" ? 'Non-Current' : '' }}</td>
                       </tr>
                     </tbody>
                   </table>

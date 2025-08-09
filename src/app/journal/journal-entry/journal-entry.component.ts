@@ -6,6 +6,7 @@ import { Account } from '../../models/account';
 import { ApiResponse } from '../../models/api-response';
 import { JournalEntry } from '../../models/journal-entry';
 import { JournalEntryService } from '../../services/journal/journal-entry.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-journal-entry',
@@ -20,7 +21,8 @@ export class JournalEntryComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
-    private journalEntryService: JournalEntryService
+    private journalEntryService: JournalEntryService,
+    private toastr:ToastrService
   ) {
     this.journalEntryForm = this.fb.group({
       date: ['', Validators.required],
@@ -65,7 +67,7 @@ export class JournalEntryComponent implements OnInit {
   debitOrCreditValidator(group: FormGroup) {
     const debit = group.get('debitAmount')?.value || 0;
     const credit = group.get('creditAmount')?.value || 0;
-    
+
     if (debit > 0 && credit > 0) {
       return { bothDebitCredit: true };
     }
@@ -160,16 +162,16 @@ export class JournalEntryComponent implements OnInit {
           }
         }
       });
-       console.log('Journal Entries:', journalEntries);
+      console.log('Journal Entries:', journalEntries);
       this.journalEntryService.createJournalEntry(journalEntries).subscribe({
         next: (response: any) => {
           if (response.status) {
             console.log('Journal Entry Created Successfully:', response.payload);
-            alert('Journal Entry Created Successfully');
+            this.toastr.success('Journal entry created successfully!', 'Success');
             this.onReset();
           } else {
             console.error('Failed to create journal entry:', response.errorMessages);
-            alert('Failed to create journal entry: ' + (response.errorMessages?.join(', ') || 'Unknown error'));
+            this.toastr.error('Failed to create journal entry: ' + (response.errorMessages?.join(', ') || 'Unknown error'), 'Error');
           }
         },
         error: (error) => {

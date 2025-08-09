@@ -1,7 +1,8 @@
+
 <div class="max-w-6xl mx-auto px-6">
     <!-- Header Section -->
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Multi-Entry Journal</h2>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Entry Journal</h2>
         <p class="text-gray-600">Create journal entries with multiple debits and credits</p>
     </div>
 
@@ -16,12 +17,12 @@
 
         <form class="p-8 space-y-6" [formGroup]="journalEntryForm" (ngSubmit)="onSubmit()">
             <!-- General Information Row -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 p-6 bg-gray-50 rounded-xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 p-6 bg-gray-50 rounded-xl">
                 <!-- Date -->
                 <div class="space-y-2">
                     <label for="date" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-calendar text-blue-500 mr-2"></i>
-                        Date
+                        Date<span class="ml-2 text-xs text-gray-500 font-normal">*</span>
                     </label>
                     <input type="date" id="date" formControlName="date"
                         class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
@@ -31,12 +32,28 @@
                         Date is required.
                     </div>
                 </div>
-
+                <!-- Reference -->
+                <div class="space-y-2">
+                    <label for="reference" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-hashtag text-indigo-500 mr-2"></i>
+                        Reference
+                        <span class="ml-2 text-xs text-gray-500 font-normal">*</span>
+                    </label>
+                    <input type="text" id="reference" formControlName="reference" placeholder="Reference number/code"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                        <div *ngIf="isFieldInvalid('reference')"
+                        class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        Reference is required.
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-8 p-6 bg-gray-50 rounded-xl">
                 <!-- Description -->
                 <div class="space-y-2">
                     <label for="description" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-align-left text-purple-500 mr-2"></i>
-                        Description
+                        Description<span class="ml-2 text-xs text-gray-500 font-normal">*</span>
                     </label>
                     <textarea id="description" formControlName="description" rows="3"
                         placeholder="Enter transaction description..."
@@ -47,20 +64,7 @@
                         Description is required.
                     </div>
                 </div>
-
-                <!-- Reference -->
-                <div class="space-y-2">
-                    <label for="reference" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-hashtag text-indigo-500 mr-2"></i>
-                        Reference
-                        <span class="ml-2 text-xs text-gray-500 font-normal">(Optional)</span>
-                    </label>
-                    <input type="text" id="reference" formControlName="reference"
-                        placeholder="Reference number/code"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                </div>
             </div>
-
             <!-- Entries Section -->
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
@@ -79,8 +83,8 @@
                 <div formArrayName="entries" class="space-y-4">
                     <ng-container *ngFor="let entry of entriesFormArray.controls; let i = index">
                         <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200"
-                             [formGroupName]="i">
-                            
+                            [formGroupName]="i">
+
                             <!-- Entry Header -->
                             <div class="flex items-center justify-between mb-4">
                                 <span class="text-sm font-semibold text-gray-700 flex items-center">
@@ -105,11 +109,13 @@
                                         <select formControlName="account"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md">
                                             <option value="" disabled>Select Account</option>
-                                            <option *ngFor="let account of accounts" [ngValue]="account.accNo+'-'+account.catCode">
+                                            <option *ngFor="let account of accounts"
+                                                [ngValue]="account.accNo+'-'+account.catCode">
                                                 {{ account.accNo }} - {{ account.name }}
                                             </option>
                                         </select>
-                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                        <div
+                                            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                             <i class="fas fa-chevron-down text-gray-400"></i>
                                         </div>
                                     </div>
@@ -127,11 +133,12 @@
                                         Debit Amount
                                     </label>
                                     <div class="relative">
-                                        <input type="number" formControlName="debitAmount"  
-                                            placeholder="0.00" min="0" step="0.01"
+                                        <input type="number" formControlName="debitAmount" placeholder="0.00" min="0"
+                                            step="0.01"
                                             class="w-full px-4 py-3 pl-8 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                            <span class="text-gray-500 text-sm">$</span>
+                                        <div
+                                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <span class="text-gray-500 text-sm">Rs</span>
                                         </div>
                                     </div>
                                 </div>
@@ -143,11 +150,12 @@
                                         Credit Amount
                                     </label>
                                     <div class="relative">
-                                        <input type="number" formControlName="creditAmount" 
-                                            placeholder="0.00" min="0" step="0.01"
+                                        <input type="number" formControlName="creditAmount" placeholder="0.00" min="0"
+                                            step="0.01"
                                             class="w-full px-4 py-3 pl-8 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                            <span class="text-gray-500 text-sm">$</span>
+                                        <div
+                                            class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <span class="text-gray-500 text-sm">Rs</span>
                                         </div>
                                     </div>
                                 </div>
@@ -178,7 +186,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="bg-white rounded-lg p-4 text-center shadow-sm">
                         <div class="text-2xl font-bold text-red-600">
-                            ${{ getTotalDebits().toFixed(2) }}
+                            Rs{{ getTotalDebits().toFixed(2) }}
                         </div>
                         <div class="text-sm text-gray-600 flex items-center justify-center">
                             <i class="fas fa-minus-circle mr-1 text-red-500"></i>
@@ -187,7 +195,7 @@
                     </div>
                     <div class="bg-white rounded-lg p-4 text-center shadow-sm">
                         <div class="text-2xl font-bold text-green-600">
-                            ${{ getTotalCredits().toFixed(2) }}
+                            Rs{{ getTotalCredits().toFixed(2) }}
                         </div>
                         <div class="text-sm text-gray-600 flex items-center justify-center">
                             <i class="fas fa-plus-circle mr-1 text-green-500"></i>
@@ -195,14 +203,14 @@
                         </div>
                     </div>
                     <div class="bg-white rounded-lg p-4 text-center shadow-sm">
-                        <div class="text-2xl font-bold" 
-                             [ngClass]="{'text-green-600': isBalanced(), 'text-red-600': !isBalanced()}">
-                            <i class="fas mr-2" 
-                               [ngClass]="{'fa-check-circle': isBalanced(), 'fa-exclamation-circle': !isBalanced()}"></i>
+                        <div class="text-2xl font-bold"
+                            [ngClass]="{'text-green-600': isBalanced(), 'text-red-600': !isBalanced()}">
+                            <i class="fas mr-2"
+                                [ngClass]="{'fa-check-circle': isBalanced(), 'fa-exclamation-circle': !isBalanced()}"></i>
                             {{ isBalanced() ? 'Balanced' : 'Unbalanced' }}
                         </div>
                         <div class="text-sm text-gray-600">
-                            Difference: ${{ getBalanceDifference().toFixed(2) }}
+                            Difference: Rs{{ getBalanceDifference().toFixed(2) }}
                         </div>
                     </div>
                 </div>

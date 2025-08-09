@@ -34,6 +34,7 @@
             <tr>
                 <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">ID</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Date</th>
+                <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Ledger Code</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Reference</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Account No</th>
                 <th class="px-6 py-3 text-left text-sm font-semibold uppercase tracking-wider">Description</th>
@@ -45,6 +46,7 @@
             <tr *ngFor="let item of reportData" class="hover:bg-gray-50 transition-colors">
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.id }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.date}}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ item.ledgerCode }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.reference }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.accNo }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ item.description }}</td>
@@ -58,7 +60,7 @@
         </tbody>
         <tfoot class="bg-gray-50">
             <tr>
-                <td colspan="5" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                <td colspan="6" class="px-6 py-4 text-right text-sm font-semibold text-gray-900">
                     <strong>Total:</strong>
                 </td>
                 <td class="px-6 py-4 text-sm font-semibold text-gray-900 text-right">
