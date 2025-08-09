@@ -1,8 +1,8 @@
-<div class="max-w-4xl mx-auto px-6">
+<div class="max-w-6xl mx-auto px-6">
     <!-- Header Section -->
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold text-gray-800 mb-2">Journal Entry</h2>
-        <p class="text-gray-600">Create and manage your financial journal entries</p>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Multi-Entry Journal</h2>
+        <p class="text-gray-600">Create journal entries with multiple debits and credits</p>
     </div>
 
     <!-- Main Form Card -->
@@ -10,139 +10,210 @@
         <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
             <h3 class="text-xl font-semibold text-white flex items-center">
                 <i class="fas fa-edit mr-3"></i>
-                Entry Details
+                Journal Entry Details
             </h3>
         </div>
 
         <form class="p-8 space-y-6" [formGroup]="journalEntryForm" (ngSubmit)="onSubmit()">
-            <!-- Account Selection Row -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Debit Account -->
-                <div class="space-y-2">
-                    <label for="debitAccount" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-minus-circle text-red-500 mr-2"></i>
-                        Debit Account
-                    </label>
-                    <div class="relative">
-                        <select id="debitAccount" formControlName="debitAccount"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md">
-                            <option value="" disabled>Select Debit Account</option>
-                            <option *ngFor="let account of accounts" [ngValue]="account.accNo+'-'+account.catCode">
-                                {{ account.accNo }} - {{ account.name }}
-                            </option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i class="fas fa-chevron-down text-gray-400"></i>
-                        </div>
-                      
-                    </div>
-                    <div *ngIf="isFieldInvalid('debitAccount')"
-                        class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Debit Account is required.
-                    </div>
-                </div>
-
-                <!-- Credit Account -->
-                <div class="space-y-2">
-                    <label for="creditAccount" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-plus-circle text-green-500 mr-2"></i>
-                        Credit Account
-                    </label>
-                    <div class="relative">
-                        <select id="creditAccount" formControlName="creditAccount"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md">
-                            <option value="" disabled>Select Credit Account</option>
-                            <option *ngFor="let account of accounts" [ngValue]="account.accNo+'-'+account.catCode">
-                                {{ account.accNo }} - {{ account.name }}
-                            </option>
-                        </select>
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <i class="fas fa-chevron-down text-gray-400"></i>
-                        </div>
-                    </div>
-                    <div *ngIf="isFieldInvalid('creditAccount')"
-                        class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Credit Account is required.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Amount and Date Row -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Amount -->
-                <div class="space-y-2">
-                    <label for="amount" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <i class="fas fa-dollar-sign text-green-500 mr-2"></i>
-                        Amount
-                    </label>
-                    <div class="relative">
-                        <input type="number" id="amount" formControlName="amount" placeholder="0.00"
-                            class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span class="text-gray-500 text-sm">$</span>
-                        </div>
-                    </div>
-                    <div *ngIf="isFieldInvalid('amount')"
-                        class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                        <i class="fas fa-exclamation-circle mr-2"></i>
-                        Amount is required and must be greater than 0.
-                    </div>
-                </div>
-
+            <!-- General Information Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 p-6 bg-gray-50 rounded-xl">
                 <!-- Date -->
                 <div class="space-y-2">
                     <label for="date" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-calendar text-blue-500 mr-2"></i>
                         Date
                     </label>
-                    <div class="relative">
-                        <input type="date" id="date" formControlName="date"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                    </div>
+                    <input type="date" id="date" formControlName="date"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
                     <div *ngIf="isFieldInvalid('date')"
                         class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                         <i class="fas fa-exclamation-circle mr-2"></i>
                         Date is required.
                     </div>
                 </div>
-            </div>
 
-            <!-- Description -->
-            <div class="space-y-2">
-                <label for="description" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                    <i class="fas fa-align-left text-purple-500 mr-2"></i>
-                    Description
-                </label>
-                <textarea id="description" formControlName="description" rows="4"
-                    placeholder="Enter a detailed description of the transaction..."
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md resize-none"></textarea>
-                <div *ngIf="isFieldInvalid('description')"
-                    class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
-                    Description is required.
+                <!-- Description -->
+                <div class="space-y-2">
+                    <label for="description" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-align-left text-purple-500 mr-2"></i>
+                        Description
+                    </label>
+                    <textarea id="description" formControlName="description" rows="3"
+                        placeholder="Enter transaction description..."
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md resize-none"></textarea>
+                    <div *ngIf="isFieldInvalid('description')"
+                        class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        Description is required.
+                    </div>
+                </div>
+
+                <!-- Reference -->
+                <div class="space-y-2">
+                    <label for="reference" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-hashtag text-indigo-500 mr-2"></i>
+                        Reference
+                        <span class="ml-2 text-xs text-gray-500 font-normal">(Optional)</span>
+                    </label>
+                    <input type="text" id="reference" formControlName="reference"
+                        placeholder="Reference number/code"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
                 </div>
             </div>
 
-            <!-- Reference -->
-            <div class="space-y-2">
-                <label for="reference" class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                    <i class="fas fa-hashtag text-indigo-500 mr-2"></i>
-                    Reference
-                    <span class="ml-2 text-xs text-gray-500 font-normal">(Optional)</span>
-                </label>
-                <input type="text" id="reference" formControlName="reference"
-                    placeholder="Enter reference number or code"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
+            <!-- Entries Section -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-lg font-semibold text-gray-800 flex items-center">
+                        <i class="fas fa-list mr-2 text-blue-500"></i>
+                        Journal Entries
+                    </h4>
+                    <button type="button" (click)="addEntry()"
+                        class="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add Entry
+                    </button>
+                </div>
+
+                <!-- Entries List -->
+                <div formArrayName="entries" class="space-y-4">
+                    <ng-container *ngFor="let entry of entriesFormArray.controls; let i = index">
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200"
+                             [formGroupName]="i">
+                            
+                            <!-- Entry Header -->
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm font-semibold text-gray-700 flex items-center">
+                                    <i class="fas fa-receipt mr-2 text-blue-500"></i>
+                                    Entry {{ i + 1 }}
+                                </span>
+                                <button *ngIf="canRemoveEntry()" type="button" (click)="removeEntry(i)"
+                                    class="text-red-500 hover:text-red-700 p-1 rounded transition-colors duration-200">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+
+                            <!-- Entry Fields -->
+                            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                                <!-- Account Selection -->
+                                <div class="lg:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-building mr-1 text-indigo-500"></i>
+                                        Account
+                                    </label>
+                                    <div class="relative">
+                                        <select formControlName="account"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 bg-white shadow-sm hover:shadow-md">
+                                            <option value="" disabled>Select Account</option>
+                                            <option *ngFor="let account of accounts" [ngValue]="account.accNo+'-'+account.catCode">
+                                                {{ account.accNo }} - {{ account.name }}
+                                            </option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                            <i class="fas fa-chevron-down text-gray-400"></i>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isEntryFieldInvalid(i, 'account')"
+                                        class="flex items-center text-red-600 text-xs bg-red-50 px-2 py-1 rounded mt-1">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        Account is required
+                                    </div>
+                                </div>
+
+                                <!-- Debit Amount -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-minus-circle mr-1 text-red-500"></i>
+                                        Debit Amount
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" formControlName="debitAmount"  
+                                            placeholder="0.00" min="0" step="0.01"
+                                            class="w-full px-4 py-3 pl-8 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <span class="text-gray-500 text-sm">$</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Credit Amount -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-plus-circle mr-1 text-green-500"></i>
+                                        Credit Amount
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" formControlName="creditAmount" 
+                                            placeholder="0.00" min="0" step="0.01"
+                                            class="w-full px-4 py-3 pl-8 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <span class="text-gray-500 text-sm">$</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Entry Validation Messages -->
+                            <div *ngIf="entriesFormArray.at(i).hasError('bothDebitCredit')"
+                                class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200 mt-3">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                Please enter either debit OR credit amount, not both.
+                            </div>
+                            <div *ngIf="entriesFormArray.at(i).hasError('noAmount')"
+                                class="flex items-center text-red-600 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200 mt-3">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                Please enter either a debit or credit amount.
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <!-- Balance Summary -->
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-balance-scale mr-2 text-blue-500"></i>
+                    Balance Summary
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white rounded-lg p-4 text-center shadow-sm">
+                        <div class="text-2xl font-bold text-red-600">
+                            ${{ getTotalDebits().toFixed(2) }}
+                        </div>
+                        <div class="text-sm text-gray-600 flex items-center justify-center">
+                            <i class="fas fa-minus-circle mr-1 text-red-500"></i>
+                            Total Debits
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 text-center shadow-sm">
+                        <div class="text-2xl font-bold text-green-600">
+                            ${{ getTotalCredits().toFixed(2) }}
+                        </div>
+                        <div class="text-sm text-gray-600 flex items-center justify-center">
+                            <i class="fas fa-plus-circle mr-1 text-green-500"></i>
+                            Total Credits
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 text-center shadow-sm">
+                        <div class="text-2xl font-bold" 
+                             [ngClass]="{'text-green-600': isBalanced(), 'text-red-600': !isBalanced()}">
+                            <i class="fas mr-2" 
+                               [ngClass]="{'fa-check-circle': isBalanced(), 'fa-exclamation-circle': !isBalanced()}"></i>
+                            {{ isBalanced() ? 'Balanced' : 'Unbalanced' }}
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            Difference: ${{ getBalanceDifference().toFixed(2) }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
-                <button type="submit" [disabled]="journalEntryForm.invalid"
+                <button type="submit" [disabled]="journalEntryForm.invalid || !isBalanced()"
                     class="flex-1 flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                     <i class="fas fa-save mr-2"></i>
-                    Submit Entry
+                    Submit Journal Entry
                 </button>
                 <button type="button" (click)="onReset()"
                     class="flex-1 flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl border border-gray-300 hover:bg-gray-200 hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-200">
@@ -155,6 +226,6 @@
 
     <!-- Footer Info -->
     <div class="text-center mt-8 text-gray-500 text-sm">
-        <p>Ensure all entries follow your organization's accounting standards</p>
+        <p>All journal entries must be balanced (Total Debits = Total Credits)</p>
     </div>
 </div>

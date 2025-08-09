@@ -34,8 +34,8 @@ import { AccontReportComponent } from './reports/accont-report/accont-report.com
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule
-    
+    FormsModule,
+    CommonModule,
   ],
   providers: [
     provideClientHydration()
