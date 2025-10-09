@@ -15,7 +15,26 @@ export class AccountService {
   getAccounts(): Observable<ApiResponse<Account[]>> {
     return this.http.get<ApiResponse<Account[]>>(`${this.apiUrl}/acc/all`).pipe(
       map(response => {
-        return response; // Ensure payload matches ApiResponse<Account[]>
+        return response;
+      }),
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+  getCusAccounts(): Observable<ApiResponse<Account[]>> {
+    return this.http.get<ApiResponse<Account[]>>(`${this.apiUrl}/acc/all-cus`).pipe(
+      map(response => {
+        return response;
+      }),
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+  getSupAccounts(): Observable<ApiResponse<Account[]>> {
+    return this.http.get<ApiResponse<Account[]>>(`${this.apiUrl}/acc/all-sup`).pipe(
+      map(response => {
+        return response;
       }),
       retry(2),
       catchError(this.handleError)
@@ -23,11 +42,20 @@ export class AccountService {
   }
 
 
-
   createAccount(account: CreateAccount) {
     return this.http.post(`${this.apiUrl}/acc/create`, account).pipe(
       map(response => {
-        return response; // Ensure payload matches Account interface
+        return response;
+      }),
+      // retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+  createCusSupAccount(account: CreateAccount) {
+    return this.http.post(`${this.apiUrl}/acc/create-sup-cus`, account).pipe(
+      map(response => {
+        return response;
       }),
       // retry(2),
       catchError(this.handleError)

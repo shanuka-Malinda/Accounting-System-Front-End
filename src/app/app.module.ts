@@ -17,6 +17,9 @@ import { CommonModule } from '@angular/common';
 import { AccontReportComponent } from './reports/accont-report/accont-report.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SupplierAccComponent } from './master-acc/supplier-acc/supplier-acc.component';
+import { CustomerAccComponent } from './master-acc/customer-acc/customer-acc.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,9 @@ import { ToastrModule } from 'ngx-toastr';
     AccountsComponent,
     JournalEntryComponent,
     AccontReportComponent,
+    DashboardComponent,
+    SupplierAccComponent,
+    CustomerAccComponent,
   ],
   imports: [
     BrowserModule,

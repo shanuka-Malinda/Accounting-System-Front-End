@@ -7,6 +7,9 @@ import { SalesComponent } from './journal/sales/sales.component';
 import { AccountsComponent } from './master-acc/accounts/accounts.component';
 import { JournalEntryComponent } from './journal/journal-entry/journal-entry.component';
 import { AccontReportComponent } from './reports/accont-report/accont-report.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { SupplierAccComponent } from './master-acc/supplier-acc/supplier-acc.component';
+import { CustomerAccComponent } from './master-acc/customer-acc/customer-acc.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -14,8 +17,13 @@ const routes: Routes = [
   {
     path: 'home', component: HomeComponent, children: [
       {
+        path:'dashboard', component:DashboardComponent,
+      },
+      {
         path: 'master-acc', children: [
-          { path: 'acc', component: AccountsComponent }
+          { path: 'acc', component: AccountsComponent },
+          { path: 'sup', component: SupplierAccComponent },
+          { path: 'cus', component: CustomerAccComponent }
         ]
       },
       {

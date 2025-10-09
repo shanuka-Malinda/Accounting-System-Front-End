@@ -193,7 +193,7 @@
                         <td class="px-4 py-3 text-gray-700">{{ account.accNo }}</td>
                         <td class="px-4 py-3 text-gray-700">{{ account.name }}</td>
                         <td class="px-4 py-3 text-gray-700">{{ account.description}}</td>
-                        <td class="px-4 py-3 text-gray-700">{{ account.isCurrent === "1" ? 'Current' : account.isCurrent === "0" ? 'Non-Current' : '' }}</td>
+                        <td class="px-4 py-3 text-gray-700">{{ account.isCurrent === "1" ? 'Current' : account.isCurrent === "0" ? 'Non-Current' : account.isCurrent==="3" ? '' : '' }}</td>
                       </tr>
                     </tbody>
                   </table>
